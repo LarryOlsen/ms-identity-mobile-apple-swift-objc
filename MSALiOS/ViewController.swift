@@ -27,16 +27,17 @@
 
 import UIKit
 import MSAL
+import IntuneMAMSwift
 
 /// 😃 A View Controller that will respond to the events of the Storyboard.
 
 class ViewController: UIViewController, UITextFieldDelegate, URLSessionDelegate {
     
     // Update the below to your client ID you received in the portal. The below is for running the demo only
-    let kClientID = "66855f8a-60cd-445e-a9bb-8cd8eadbd3fa"
+    let kClientID = "677de23f-cd90-4080-94d7-9ef7da00fdcb"
     let kGraphEndpoint = "https://graph.microsoft.com/"
     let kAuthority = "https://login.microsoftonline.com/common"
-    let kRedirectUri = "msauth.com.microsoft.identitysample.MSALiOS://auth"
+    let kRedirectUri = "msauth.com.totaltriage.totaltriage://auth"
     
     let kScopes: [String] = ["user.read"]
     
@@ -211,6 +212,10 @@ extension ViewController {
             self.updateLogging(text: "Access token is \(self.accessToken)")
             self.updateCurrentAccount(account: result.account)
             self.getContentWithToken()
+            
+            let accountIdentifier = result.account.homeAccountId?.objectId ?? ""
+            
+            IntuneMAMEnrollmentManager.instance().registerAndEnrollAccountId(accountIdentifier)
         }
     }
     
